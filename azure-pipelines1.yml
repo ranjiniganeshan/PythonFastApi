@@ -1,0 +1,12 @@
+trigger:
+- main
+
+pool:
+  name: mypool
+
+steps:
+  - task: Docker@2
+    displayName: "Authenticate Docker"
+    inputs:
+      command: login
+      containerRegistry: DOCKER_REGISTRY_SERVICE_CONNECTION  # Test service connection reference here

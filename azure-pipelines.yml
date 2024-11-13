@@ -1,0 +1,38 @@
+trigger:
+- main
+
+pool:
+  name: mypool  # Specify the name of your self-hosted agent pool
+  # demands:
+  #   - docker  # Ensure the agent has Docker installed
+
+variables:
+  tag: '$(Build.BuildId)'
+  repositoryName: docker.io/chandikas/fastapi-app
+
+steps:
+  - script: |
+      python3.12 -m venv venv
+      source venv/bin/activate
+      pip install -r requirements.txt
+    displayName: "Install Dependencies"
+
+  - script: |
+      source venv/bin/activate
+      pytest --junitxml=results.xml
+    displayName: "Run Unit Tests"
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    displayName: "Publish Test Results"
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/results.xml'
+      failTaskOnFailedTests: true
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: DOCKER_REGISTRY_SERVICE_CONNECTION
+      repository: $(repositoryName)
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
