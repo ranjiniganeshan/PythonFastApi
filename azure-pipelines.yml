@@ -8,7 +8,7 @@ pool:
 
 variables:
   tag: '$(Build.BuildId)'
-  repositoryName: docker.io/chandikas/fastapi-app
+  repositoryName: docker.io/ranjini/fastapi-app
 
 steps:
   - script: |
