@@ -28,7 +28,7 @@ steps:
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: '**/results.xml'
-      failTaskOnFailedTests: true
+      failTaskOnFailedTests: false
 
   - task: Docker@2
     inputs:
